@@ -10,13 +10,14 @@ spec:
   chart: vcluster
   valuesContent: |-
     hostname: "rancher.172.19.108.3.sslip.io"
+    rancherVersion: "v2.7.4"
     vcluster:
       image: rancher/k3s:v1.25.10-k3s1
     sync:
       ingresses:
         enabled: "true"
     init:
-      manifests: |-
+      manifestsTemplate: |-
         apiVersion: v1
         kind: Namespace
         metadata:
@@ -54,9 +55,9 @@ spec:
           chart: rancher
           set:
             ingress.tls.source: rancher
-            hostname: rancher.172.19.108.3.sslip.io
+            hostname: {{ .Values.hostname }}
             replicas: 1
-            version: v2.7.2
+            version: {{ .Values.rancherVersion }}
             global.cattle.psp.enabled: "false"
             bootstrapPassword: password1234
           helmVersion: v3
